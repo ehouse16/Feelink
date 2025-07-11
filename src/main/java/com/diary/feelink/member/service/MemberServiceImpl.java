@@ -1,5 +1,7 @@
 package com.diary.feelink.member.service;
 
+import com.diary.feelink.exception.DomainException;
+import com.diary.feelink.exception.ErrorType;
 import com.diary.feelink.member.dto.request.SignUpRequest;
 import com.diary.feelink.member.entity.Member;
 import com.diary.feelink.member.repository.MemberRepository;
@@ -24,6 +26,12 @@ public class MemberServiceImpl implements MemberService {
                 .password(encodedPassword)
                 .nickname(signUpRequest.nickname())
                 .build();
+
+        if(memberRepository.existsByEmail(signUpRequest.email()))
+            throw new DomainException(ErrorType.DUPLICATE_EMAIL);
+
+        if(memberRepository.existsByNickname(signUpRequest.nickname()))
+            throw new DomainException(ErrorType.DUPLICATE_NICKNAME);
 
         memberRepository.save(member);
     }

@@ -13,6 +13,11 @@ public class DomainException extends RuntimeException {
         this.status = status;
     }
 
+    public DomainException(ErrorType errorType){
+        this.message = errorType.getMessage();
+        this.status = errorType.getStatus();
+    }
+
     public ExceptionResponse toResponse(){
         return new ExceptionResponse(message);
     }
