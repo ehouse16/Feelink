@@ -32,6 +32,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // VALIDATION
+    implementation("org.springframework.boot:spring-boot-starter-validation:3.5.0")
+
+
+    // BCRYPT
+    implementation 'org.springframework.security:spring-security-crypto:6.2.4' // 버전은 spring boot 3.5.3과 맞춤
     runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
