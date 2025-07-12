@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/diaries")
@@ -36,5 +38,24 @@ public class DiaryControllerImpl implements DiaryController {
         DiaryResponse diaryResponse = diaryService.update(diaryId, request, member);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 수정되었습니다.", diaryResponse));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getAllDiary(
+            @LoginMember Member member
+    ){
+        List<DiaryResponse> diaries = diaryService.getDiaries(member);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 일기들을 반환하였습니다", diaries));
+    }
+
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<ApiResponse<DiaryResponse>> getDiary(
+            @PathVariable Long diaryId,
+            @LoginMember Member member
+    ){
+        DiaryResponse response = diaryService.getDiary(diaryId);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 일기를 반환하였습니다.", response));
     }
 }

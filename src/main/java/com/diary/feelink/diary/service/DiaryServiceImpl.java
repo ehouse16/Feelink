@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
@@ -47,5 +49,19 @@ public class DiaryServiceImpl implements DiaryService {
         diary.update(request);
 
         return DiaryResponse.fromEntity(diary);
+    }
+
+    @Override
+    public List<DiaryResponse> getDiaries(Member member) {
+        return diaryRepository.findAllByMemberId(member.getId()).stream()
+                .map(DiaryResponse::fromEntity)
+                .toList();
+    }
+
+    @Override
+    public DiaryResponse getDiary(Long diaryId) {
+        return DiaryResponse.fromEntity(diaryRepository.findById(diaryId)
+                .orElseThrow(()->new DomainException(ErrorType.DIARY_NOT_FOUND))
+        );
     }
 }
