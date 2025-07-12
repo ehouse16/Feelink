@@ -1,5 +1,7 @@
 package com.diary.feelink.member.annotation;
 
+import com.diary.feelink.exception.DomainException;
+import com.diary.feelink.exception.ErrorType;
 import com.diary.feelink.member.entity.Member;
 import com.diary.feelink.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,14 +17,14 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class LoginUserResolver implements HandlerMethodArgumentResolver {
+public class LoginMemberResolver implements HandlerMethodArgumentResolver {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(LoginUser.class)
+        return parameter.hasParameterAnnotation(LoginMember.class)
                  && parameter.getParameterType().equals(Member.class);
     }
 
@@ -35,14 +37,21 @@ public class LoginUserResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         HttpSession session = request.getSession(false);
 
-        if(session == null) {return null;}
+        if(session == null) {
+            throw new DomainException(ErrorType.SESSION_NOT_FOUND);
+        }
 
         String sessionToken = (String) session.getAttribute("LOGIN_TOKEN");
-        if(sessionToken == null) {return null;}
+        if(sessionToken == null) {
+            throw new DomainException(ErrorType.LOGIN_REQUIRED);
+        }
 
         String nickname = (String) redisTemplate.opsForValue().get("session:" + sessionToken);
-        if(nickname == null) {return null;}
+        if(nickname == null) {
+            throw new DomainException(ErrorType.SESSION_EXPIRED);
+        }
 
-        return memberRepository.findByNickname(nickname).orElse(null);
+        return memberRepository.findByNickname(nickname)
+                .orElseThrow(() -> new DomainException(ErrorType.MEMBER_NOT_FOUND));
     }
 }
