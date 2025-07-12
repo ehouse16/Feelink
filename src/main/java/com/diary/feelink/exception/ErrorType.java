@@ -17,8 +17,11 @@ public enum ErrorType {
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "올바르지 않은 비밀번호입니다."),
     LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
     SESSION_EXPIRED(HttpStatus.UNAUTHORIZED, "세션이 만료되었거나 잘못되었습니다."),
-    SESSION_NOT_FOUND(HttpStatus.UNAUTHORIZED, "세션이 존재하지 않습니다");
+    SESSION_NOT_FOUND(HttpStatus.UNAUTHORIZED, "세션이 존재하지 않습니다"),
 
+    //DIARY
+    DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하는 일기를 찾을 수 없습니다."),
+    MEMBER_DIARY_NOT_MATCH(HttpStatus.BAD_REQUEST, "자기가 쓴 일기만 수정,삭제 할 수 있습니다.");
     private final HttpStatus status;
     private final String message;
 }

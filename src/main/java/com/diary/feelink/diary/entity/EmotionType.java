@@ -1,4 +1,4 @@
-package com.diary.feelink.post.entity;
+package com.diary.feelink.diary.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
