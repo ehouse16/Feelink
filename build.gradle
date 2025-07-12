@@ -37,8 +37,13 @@ dependencies {
 
 
     // BCRYPT
-    implementation 'org.springframework.security:spring-security-crypto:6.2.4' // 버전은 spring boot 3.5.3과 맞춤
+    implementation 'org.springframework.security:spring-security-crypto:6.2.4'
+
+    //MYSQL
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //REDIS
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.4.5")
 }
 
 tasks.named('test') {
