@@ -1,6 +1,6 @@
 package com.diary.feelink.config;
 
-import com.diary.feelink.member.annotation.LoginUserResolver;
+import com.diary.feelink.member.annotation.LoginMemberResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,10 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final LoginUserResolver loginUserResolver;
+    private final LoginMemberResolver loginMemberResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers){
-        resolvers.add(loginUserResolver);
+        resolvers.add(loginMemberResolver);
     }
 }
