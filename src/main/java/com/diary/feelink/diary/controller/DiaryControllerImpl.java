@@ -2,6 +2,7 @@ package com.diary.feelink.diary.controller;
 
 import com.diary.feelink.common.ApiResponse;
 import com.diary.feelink.diary.dto.request.DiaryRegisterRequest;
+import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
 import com.diary.feelink.diary.dto.response.DiaryResponse;
 import com.diary.feelink.diary.service.DiaryService;
 import com.diary.feelink.member.annotation.LoginMember;
@@ -9,10 +10,7 @@ import com.diary.feelink.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +26,15 @@ public class DiaryControllerImpl implements DiaryController {
         DiaryResponse diaryResponse = diaryService.register(diaryRegisterRequest, member);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 등록되었습니다.", diaryResponse));
+    }
+
+    @PutMapping("/{diaryId}")
+    public ResponseEntity<ApiResponse<DiaryResponse>> update(
+            @PathVariable Long diaryId,
+            @RequestBody @Validated DiaryUpdateRequest request,
+            @LoginMember Member member) {
+        DiaryResponse diaryResponse = diaryService.update(diaryId, request, member);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 수정되었습니다.", diaryResponse));
     }
 }

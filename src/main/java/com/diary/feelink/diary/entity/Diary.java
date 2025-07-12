@@ -1,6 +1,7 @@
 package com.diary.feelink.diary.entity;
 
 import com.diary.feelink.common.BaseEntity;
+import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,5 +32,10 @@ public class Diary extends BaseEntity {
         this.content = content;
         this.emotionType = emotionType;
         this.memberId = memberId;
+    }
+
+    public void update(DiaryUpdateRequest request) {
+        this.title = request.title();
+        this.content = request.content();
     }
 }
