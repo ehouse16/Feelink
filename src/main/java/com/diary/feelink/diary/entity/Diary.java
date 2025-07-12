@@ -1,16 +1,17 @@
-package com.diary.feelink.post.entity;
+package com.diary.feelink.diary.entity;
 
 import com.diary.feelink.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "posts")
+@Table(name = "diaries")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseEntity {
+public class Diary extends BaseEntity {
     @Column(name = "title")
     private String title;
 
@@ -23,4 +24,12 @@ public class Post extends BaseEntity {
 
     @Column(name = "member_id")
     private Long memberId;
+
+    @Builder
+    public Diary (String title, String content, EmotionType emotionType, Long memberId) {
+        this.title = title;
+        this.content = content;
+        this.emotionType = emotionType;
+        this.memberId = memberId;
+    }
 }
