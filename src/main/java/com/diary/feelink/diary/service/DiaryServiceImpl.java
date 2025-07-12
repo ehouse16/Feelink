@@ -33,7 +33,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         diaryRepository.save(diary);
 
-        return DiaryResponse.fromEntity(diary);
+        return DiaryResponse.fromEntity(diary, member.getNickname());
     }
 
     @Override
@@ -48,20 +48,37 @@ public class DiaryServiceImpl implements DiaryService {
 
         diary.update(request);
 
-        return DiaryResponse.fromEntity(diary);
+        return DiaryResponse.fromEntity(diary, member.getNickname());
     }
 
     @Override
     public List<DiaryResponse> getDiaries(Member member) {
         return diaryRepository.findAllByMemberId(member.getId()).stream()
-                .map(DiaryResponse::fromEntity)
+                .map(diary -> DiaryResponse.fromEntity(diary, member.getNickname()))
                 .toList();
     }
 
     @Override
-    public DiaryResponse getDiary(Long diaryId) {
-        return DiaryResponse.fromEntity(diaryRepository.findById(diaryId)
-                .orElseThrow(()->new DomainException(ErrorType.DIARY_NOT_FOUND))
-        );
+    public DiaryResponse getDiary(Long diaryId, Member member) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
+
+        if(!diary.getMemberId().equals(member.getId())) {
+            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
+        }
+
+        return DiaryResponse.fromEntity(diary, member.getNickname());
+    }
+
+    @Override
+    public void delete(Long diaryId, Member member) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
+
+        if(!diary.getMemberId().equals(member.getId())){
+            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
+        }
+
+        diaryRepository.delete(diary);
     }
 }

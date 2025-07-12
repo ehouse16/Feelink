@@ -54,8 +54,19 @@ public class DiaryControllerImpl implements DiaryController {
             @PathVariable Long diaryId,
             @LoginMember Member member
     ){
-        DiaryResponse response = diaryService.getDiary(diaryId);
+        DiaryResponse response = diaryService.getDiary(diaryId, member);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 일기를 반환하였습니다.", response));
     }
+
+    @DeleteMapping("/{diaryId}")
+    public ResponseEntity<ApiResponse<Void>> deleteDiary(
+            @PathVariable Long diaryId,
+            @LoginMember Member member
+    ){
+        diaryService.delete(diaryId,member);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 삭제되었습니다.", null));
+    }
+
 }

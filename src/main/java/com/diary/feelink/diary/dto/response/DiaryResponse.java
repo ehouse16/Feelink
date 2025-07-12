@@ -6,13 +6,15 @@ import com.diary.feelink.diary.entity.EmotionType;
 public record DiaryResponse(
         String title,
         String content,
-        EmotionType emotionType
+        EmotionType emotionType,
+        String nickName
 ) {
-    public static DiaryResponse fromEntity(Diary diary) {
+    public static DiaryResponse fromEntity(Diary diary, String nickname) {
         return new DiaryResponse(
                 diary.getTitle(),
                 diary.getContent(),
-                diary.getEmotionType()
+                diary.getEmotionType(),
+                nickname
         );
     }
 }
