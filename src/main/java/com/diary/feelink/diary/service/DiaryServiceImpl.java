@@ -40,6 +40,10 @@ public class DiaryServiceImpl implements DiaryService {
         Diary diary = diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
 
+        if(!diary.getMemberId().equals(member.getId())){
+            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
+        }
+
         diary.update(request);
 
         return DiaryResponse.fromEntity(diary);
