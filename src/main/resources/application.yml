@@ -1,4 +1,7 @@
 spring:
+  config:
+    import:
+      - optional:file:.env[.properties]  # .properties 추가
   application:
     name: Feelink
   profiles:
@@ -10,3 +13,7 @@ spring:
   messages:
     basename: messages
     encoding: UTF-8
+openai:
+  api-key: ${OPENAI_API_KEY}
+  api-url: ${OPENAI_API_URL}
+  model: ${OPENAI_MODEL}
