@@ -23,14 +23,18 @@ public class Diary extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EmotionType emotionType;
 
+    @Column(name = "confidence")
+    private Double confidence;
+
     @Column(name = "member_id")
     private Long memberId;
 
     @Builder
-    public Diary (String title, String content, EmotionType emotionType, Long memberId) {
+    public Diary (String title, String content, EmotionType emotionType, Double confidence, Long memberId) {
         this.title = title;
         this.content = content;
         this.emotionType = emotionType;
+        this.confidence = confidence;
         this.memberId = memberId;
     }
 

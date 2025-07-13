@@ -1,5 +1,7 @@
 package com.diary.feelink.diary.service;
 
+import com.diary.feelink.ai.dto.response.EmotionResult;
+import com.diary.feelink.ai.service.EmotionAnalysisService;
 import com.diary.feelink.diary.dto.request.DiaryRegisterRequest;
 import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
 import com.diary.feelink.diary.dto.response.DiaryResponse;
@@ -19,15 +21,19 @@ import java.util.List;
 public class DiaryServiceImpl implements DiaryService {
 
     private final DiaryRepository diaryRepository;
+    private final EmotionAnalysisService emotionAnalysisService;
 
     @Override
     @Transactional
     public DiaryResponse register(DiaryRegisterRequest diaryRegisterRequest, Member member) {
+
+        EmotionResult result = emotionAnalysisService.analyzeEmotion(diaryRegisterRequest.content());
+
         Diary diary = Diary.builder()
                 .title(diaryRegisterRequest.title())
                 .content(diaryRegisterRequest.content())
-                //ai 붙이고 나서 감정 추가하기
-                .emotionType(null)
+                .emotionType(result.emotionType())
+                .confidence(result.confidence())
                 .memberId(member.getId())
                 .build();
 
