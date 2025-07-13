@@ -77,7 +77,8 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
                 return new EmotionResult(emotionType, confidence);
             }
         } catch (Exception e) {
-            // 파싱 오류 시
+            log.error(e.getMessage());
+            throw new DomainException(ErrorType.CANNOT_PARSE);
         }
         return new EmotionResult(EmotionType.NEUTRAL, 0.5);
     }
@@ -86,6 +87,6 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
         return Arrays.stream(EmotionType.values())
                 .filter(emotion -> emotion.getEmotionName().equals(emotionName))
                 .findFirst()
-                .orElse(EmotionType.NEUTRAL);
+                .orElseThrow(() -> new DomainException(ErrorType.CANNOT_PARSE));
     }
 }
