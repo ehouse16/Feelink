@@ -17,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -67,19 +69,22 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
 
     private EmotionResult parseEmotionResult(String result) {
         try {
-            // "행복:0.8" 형식 파싱
-            String[] parts = result.split(":");
-            if (parts.length == 2) {
-                String emotionName = parts[0].trim();
-                double confidence = Double.parseDouble(parts[1].trim());
+            // "행복:1.0", "행복: 1.0", "행복 (1.0)" 등 다양한 형식 허용
+            Pattern pattern = Pattern.compile("([가-힣]+)[\\s:()]*([0-9]*\\.?[0-9]+)");
+            Matcher matcher = pattern.matcher(result.trim());
+
+            if (matcher.find()) {
+                String emotionName = matcher.group(1).trim();
+                double confidence = Double.parseDouble(matcher.group(2).trim());
 
                 EmotionType emotionType = mapToEmotionType(emotionName);
                 return new EmotionResult(emotionType, confidence);
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Failed to parse emotion result: {}", e.getMessage());
             throw new DomainException(ErrorType.CANNOT_PARSE);
         }
+
         return new EmotionResult(EmotionType.NEUTRAL, 0.5);
     }
 
