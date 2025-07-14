@@ -1,10 +1,10 @@
-package com.diary.feelink.member.service;
+package com.diary.feelink.auth.service;
 
 import com.diary.feelink.exception.DomainException;
 import com.diary.feelink.exception.ErrorType;
-import com.diary.feelink.member.dto.request.LogInRequest;
-import com.diary.feelink.member.dto.request.SignUpRequest;
-import com.diary.feelink.member.dto.response.LogInResponse;
+import com.diary.feelink.auth.dto.request.LogInRequest;
+import com.diary.feelink.auth.dto.request.SignUpRequest;
+import com.diary.feelink.auth.dto.response.LogInResponse;
 import com.diary.feelink.member.entity.Member;
 import com.diary.feelink.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -48,5 +48,15 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return LogInResponse.fromEntity(member);
+    }
+
+    @Override
+    public boolean isExistEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean isExistNickName(String nickname) {
+        return memberRepository.existsByNickname(nickname);
     }
 }

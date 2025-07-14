@@ -3,12 +3,9 @@ package com.diary.feelink.diary.service;
 import com.diary.feelink.ai.dto.response.EmotionResult;
 import com.diary.feelink.ai.service.EmotionAnalysisService;
 import com.diary.feelink.diary.dto.request.DiaryRegisterRequest;
-import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
 import com.diary.feelink.diary.dto.response.DiaryResponse;
 import com.diary.feelink.diary.entity.Diary;
 import com.diary.feelink.diary.repository.DiaryRepository;
-import com.diary.feelink.exception.DomainException;
-import com.diary.feelink.exception.ErrorType;
 import com.diary.feelink.member.entity.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,57 +31,23 @@ public class DiaryServiceImpl implements DiaryService {
                 .content(diaryRegisterRequest.content())
                 .emotionType(result.emotionType())
                 .confidence(result.confidence())
-                .memberId(member.getId())
+                .member(member)
                 .build();
 
         diaryRepository.save(diary);
 
-        return DiaryResponse.fromEntity(diary, member.getNickname());
+        return DiaryResponse.fromEntity(diary);
     }
 
     @Override
-    @Transactional
-    public DiaryResponse update(Long diaryId, DiaryUpdateRequest request, Member member) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
-
-        if(!diary.getMemberId().equals(member.getId())){
-            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
-        }
-
-        diary.update(request);
-
-        return DiaryResponse.fromEntity(diary, member.getNickname());
-    }
-
-    @Override
-    public List<DiaryResponse> getDiaries(Member member) {
-        return diaryRepository.findAllByMemberId(member.getId()).stream()
-                .map(diary -> DiaryResponse.fromEntity(diary, member.getNickname()))
+    public List<DiaryResponse> getDiaries() {
+        return diaryRepository.findAll().stream()
+                .map(DiaryResponse::fromEntity)
                 .toList();
     }
 
     @Override
-    public DiaryResponse getDiary(Long diaryId, Member member) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
-
-        if(!diary.getMemberId().equals(member.getId())) {
-            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
-        }
-
-        return DiaryResponse.fromEntity(diary, member.getNickname());
-    }
-
-    @Override
-    public void delete(Long diaryId, Member member) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new DomainException(ErrorType.DIARY_NOT_FOUND));
-
-        if(!diary.getMemberId().equals(member.getId())){
-            throw new DomainException(ErrorType.MEMBER_DIARY_NOT_MATCH);
-        }
-
-        diaryRepository.delete(diary);
+    public DiaryResponse getDiary(Long diaryId) {
+        return DiaryResponse.fromEntity(diaryRepository.getById(diaryId));
     }
 }

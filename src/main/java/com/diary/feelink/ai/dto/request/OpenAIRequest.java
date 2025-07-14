@@ -12,7 +12,7 @@ public record OpenAIRequest(
         double temperature
 ) {
     public OpenAIRequest(String model, List<Message> messages){
-        this(model, messages, 100, 0.3);
+        this(model, messages, 100, 0.5);
     }
 
     public record Message(
