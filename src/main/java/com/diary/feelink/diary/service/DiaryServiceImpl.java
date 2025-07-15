@@ -41,7 +41,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public List<DiaryResponse> getDiaries() {
-        return diaryRepository.findAll().stream()
+        return diaryRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(DiaryResponse::fromEntity)
                 .toList();
     }

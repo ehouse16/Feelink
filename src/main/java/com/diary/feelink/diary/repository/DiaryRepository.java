@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     List<Diary> findAllByMemberId(Long memberId);
+    List<Diary> findAllByOrderByCreatedAtDesc();
 }
