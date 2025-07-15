@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface DiaryService {
     DiaryResponse register(DiaryRegisterRequest diaryRegisterRequest, Member member);
-    DiaryResponse update(Long diaryId, DiaryUpdateRequest request, Member member);
-    List<DiaryResponse> getDiaries(Member member);
-    DiaryResponse getDiary(Long diaryId, Member member);
-    void delete(Long diaryId, Member member);
+    List<DiaryResponse> getDiaries();
+    DiaryResponse getDiary(Long diaryId);
 }

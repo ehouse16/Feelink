@@ -2,6 +2,7 @@ package com.diary.feelink.diary.entity;
 
 import com.diary.feelink.common.BaseEntity;
 import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
+import com.diary.feelink.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,16 +27,17 @@ public class Diary extends BaseEntity {
     @Column(name = "confidence")
     private Double confidence;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
-    public Diary (String title, String content, EmotionType emotionType, Double confidence, Long memberId) {
+    public Diary (String title, String content, EmotionType emotionType, Double confidence, Member member) {
         this.title = title;
         this.content = content;
         this.emotionType = emotionType;
         this.confidence = confidence;
-        this.memberId = memberId;
+        this.member = member;
     }
 
     public void update(DiaryUpdateRequest request) {

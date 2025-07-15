@@ -1,4 +1,4 @@
-package com.diary.feelink.member.dto.response;
+package com.diary.feelink.auth.dto.response;
 
 import com.diary.feelink.member.entity.Member;
 

@@ -30,43 +30,22 @@ public class DiaryControllerImpl implements DiaryController {
         return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 등록되었습니다.", diaryResponse));
     }
 
-    @PutMapping("/{diaryId}")
-    public ResponseEntity<ApiResponse<DiaryResponse>> update(
-            @PathVariable Long diaryId,
-            @RequestBody @Validated DiaryUpdateRequest request,
-            @LoginMember Member member) {
-        DiaryResponse diaryResponse = diaryService.update(diaryId, request, member);
-
-        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 수정되었습니다.", diaryResponse));
-    }
-
+    //전체 목록 조회
     @GetMapping
-    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getAllDiary(
-            @LoginMember Member member
+    public ResponseEntity<ApiResponse<List<DiaryResponse>>> getDiaries(
     ){
-        List<DiaryResponse> diaries = diaryService.getDiaries(member);
-
-        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 일기들을 반환하였습니다", diaries));
+        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 목록을 불러왔습니다.",
+                diaryService.getDiaries()));
     }
 
+    //상세 보기
     @GetMapping("/{diaryId}")
     public ResponseEntity<ApiResponse<DiaryResponse>> getDiary(
-            @PathVariable Long diaryId,
-            @LoginMember Member member
+            @PathVariable Long diaryId
     ){
-        DiaryResponse response = diaryService.getDiary(diaryId, member);
+        DiaryResponse response = diaryService.getDiary(diaryId);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 일기를 반환하였습니다.", response));
     }
-
-    @DeleteMapping("/{diaryId}")
-    public ResponseEntity<ApiResponse<Void>> deleteDiary(
-            @PathVariable Long diaryId,
-            @LoginMember Member member
-    ){
-        diaryService.delete(diaryId,member);
-
-        return ResponseEntity.ok(new ApiResponse<>(true, "성공적으로 삭제되었습니다.", null));
-    }
-
+    //검색
 }

@@ -1,4 +1,4 @@
-package com.diary.feelink.member.dto.request;
+package com.diary.feelink.auth.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

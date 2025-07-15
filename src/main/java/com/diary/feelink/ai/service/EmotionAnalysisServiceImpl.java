@@ -81,6 +81,7 @@ public class EmotionAnalysisServiceImpl implements EmotionAnalysisService {
                 return new EmotionResult(emotionType, confidence);
             }
         } catch (Exception e) {
+            log.info("결과값: {} " + result);
             log.error("Failed to parse emotion result: {}", e.getMessage());
             throw new DomainException(ErrorType.CANNOT_PARSE);
         }
