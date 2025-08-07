@@ -1,5 +1,6 @@
 package com.diary.feelink.diary.entity;
 
+import com.diary.feelink.comment.entity.Comment;
 import com.diary.feelink.common.BaseEntity;
 import com.diary.feelink.diary.dto.request.DiaryUpdateRequest;
 import com.diary.feelink.member.entity.Member;
@@ -8,6 +9,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @Entity
@@ -30,6 +35,9 @@ public class Diary extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "diary")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Diary (String title, String content, EmotionType emotionType, Double confidence, Member member) {

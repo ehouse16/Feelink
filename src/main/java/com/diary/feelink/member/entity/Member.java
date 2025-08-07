@@ -1,5 +1,6 @@
 package com.diary.feelink.member.entity;
 
+import com.diary.feelink.comment.entity.Comment;
 import com.diary.feelink.common.BaseEntity;
 import com.diary.feelink.diary.entity.Diary;
 import jakarta.persistence.Column;
@@ -30,6 +31,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Diary> diaries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Member(String email,String password, String nickname) {
